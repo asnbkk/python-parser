@@ -34,29 +34,35 @@ while True:
     print(url)
     for article in soup.find_all('article'):
         name = article.find(
-            'div', {'class': 'consumer-information__name'}).text
-        # print(name)
+            'div', {'class': 'consumer-information__name'}).text.strip()
+        print(name)
 
-        location = article.find(
-            'div', {'class': 'consumer-information__location'}).span.text
-        # print(location)
+        try:
+            location = article.find(
+                'div', {'class': 'consumer-information__location'}).span.text.strip()
+            print(location)
+        except Exception as e:
+            location = None
 
         section = article.find('section')
 
         rating = section.find(
             'div', {'class': 'star-rating star-rating--medium'}).img['alt']
-        # print(rating)
+        print(rating)
 
         date_json = section.find('script').string
         date = json.loads(date_json)['publishedDate']
-        # print(date)
+        print(date)
 
-        headline = section.h2.a.text
-        # print(headline)
+        headline = section.h2.a.text.strip()
+        print(headline)
 
-        summary = section.find('p', {'class': 'review-content__text'}).text
-        # print(summary)
-
+        try:
+            summary = section.find(
+                'p', {'class': 'review-content__text'}).text.strip()
+            print(summary)
+        except Exception as e:
+            summary = None
         print()
 
         csv_wirter.writerow([name, location, rating, date, headline, summary])
